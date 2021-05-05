@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # personal apps
     'expenses.apps.ExpensesConfig',
+    'users',
 
     'django.contrib.sites',
     'allauth',
@@ -41,9 +42,10 @@ INSTALLED_APPS = [
 
     'djmoney',
     
-    # 'rest_framework',
-    # 'rest_framework.authtoken',
-    # 'dj_rest_auth',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
 
 
     # django in-built apps
@@ -144,11 +146,13 @@ STATIC_URL = '/static/'
 
 AUTHENTICATION_BACKENDS = [
 
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
 
-    # `allauth` specific authentication methods, such as login by e-mail
-    'allauth.account.auth_backends.AuthenticationBackend',
+
 
 ]
 ACCOUNT_AUTHENTICATION_METHOD = "email"
@@ -159,6 +163,22 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SITE_ID = 1
 
 
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+LOGIN_URL = 'http://localhost:8000/users/login'
+
 
 # Django Money settings
 DEFAULT_CURRENCY = 'GBP'
+
+
+
+# REST FRAMEWORK SETTINGS
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+    ],
+}
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'expenses-app-auth'
+
+DEFAULT_AUTO_FIELD='django.db.models.AutoField' 

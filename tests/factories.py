@@ -4,6 +4,7 @@ import factory
 from django.contrib.auth import get_user_model
 from djmoney.money import Money
 from expenses.models import Category, Retailer, Transaction
+from allauth.account.models import EmailAddress
 
 User = get_user_model()
 
@@ -14,7 +15,17 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     username = factory.Sequence(lambda n: f"user_{n}")
     email = factory.Faker("email")
-    password = factory.PostGenerationMethodCall("set_password", f"{email}_password")
+    password = factory.PostGenerationMethodCall(
+        "set_password", f"{email}_password")
+    is_active = True
+    is_staff = False
+
+    @factory.post_generation
+    def verify(obj, create, extracted, **kwargs):
+        if not create:
+            return
+        EmailAddress.objects.create(
+            email=obj.email, verified=True, primary=True, user=obj)
 
 
 class RetailerFactory(factory.django.DjangoModelFactory):

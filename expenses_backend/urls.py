@@ -19,5 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('mysupersecretnotadmin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    # path('dj-rest-auth/', include('dj_rest_auth.urls'))
+    path('users/', include('users.urls')),
 ]

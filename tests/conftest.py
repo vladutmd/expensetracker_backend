@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 from djmoney.money import Money
 from expenses.models import Category, Retailer, Transaction
 from pytest_factoryboy import register
+from rest_framework.test import APIClient, APIRequestFactory
+from allauth.account.models import EmailAddress
 
 from tests.factories import (CategoryFactory, RetailerFactory,
                              TransactionFactory, UserFactory)
@@ -14,9 +16,12 @@ User = get_user_model()
 def django_db_setup(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
         user_1: User = User.objects.create(
-            email="hi@there.com", password="themostsecurepassword"
+            username="hi", email="hi@there.com", password="themostsecurepassword", is_active=True
         )
-        retailer_1 = Retailer.objects.create(name="AmazIn", online=True, user=user_1)
+        EmailAddress.objects.create(
+            email=user_1.email, verified=True, primary=True, user=user_1)
+        retailer_1 = Retailer.objects.create(
+            name="AmazIn", online=True, user=user_1)
         category_1 = Category.objects.create(
             name="Groceries", product_type="P", user=user_1
         )
@@ -73,3 +78,13 @@ def same_user_transaction__retailer(same_user_retailer):
 @pytest.fixture
 def same_user_transaction__category(same_user_category):
     return same_user_category
+
+
+@pytest.fixture
+def api_client():
+    return APIClient()
+
+
+@pytest.fixture
+def api_reqfactory():
+    return APIRequestFactory()
