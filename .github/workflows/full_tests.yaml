@@ -1,4 +1,4 @@
-name: Run FastAPI tests
+name: Run Pytest tests with PostgreSQL integration
 on: [push]
 
 jobs:
