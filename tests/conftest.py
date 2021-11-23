@@ -6,8 +6,12 @@ from pytest_factoryboy import register
 from rest_framework.test import APIClient, APIRequestFactory
 from allauth.account.models import EmailAddress
 
-from tests.factories import (CategoryFactory, RetailerFactory,
-                             TransactionFactory, UserFactory)
+from tests.factories import (
+    CategoryFactory,
+    RetailerFactory,
+    TransactionFactory,
+    UserFactory,
+)
 
 User = get_user_model()
 
@@ -16,16 +20,19 @@ User = get_user_model()
 def django_db_setup(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
         user_1: User = User.objects.create(
-            username="hi", email="hi@there.com", password="themostsecurepassword", is_active=True
+            username="hi",
+            email="hi@there.com",
+            password="themostsecurepassword",
+            is_active=True,
         )
         EmailAddress.objects.create(
-            email=user_1.email, verified=True, primary=True, user=user_1)
-        retailer_1 = Retailer.objects.create(
-            name="AmazIn", online=True, user=user_1)
+            email=user_1.email, verified=True, primary=True, user=user_1
+        )
+        retailer_1 = Retailer.objects.create(name="AmazIn", online=True, user=user_1)
         category_1 = Category.objects.create(
             name="Groceries", product_type="P", user=user_1
         )
-        transaction_1 = Transaction.objects.create(
+        _ = Transaction.objects.create(
             amount=Money(420.00, "GBP"),
             name="Yoga Mat for Meditation",
             retailer=retailer_1,

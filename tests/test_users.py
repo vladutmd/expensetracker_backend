@@ -1,7 +1,5 @@
 import pytest
 from django.contrib.auth import get_user_model
-from django.contrib.auth.hashers import check_password
-
 
 
 User = get_user_model()
@@ -13,8 +11,8 @@ def test_user_1():
     assert isinstance(user_1, User)
     assert user_1.email == "hi@there.com"
     assert user_1.password == "themostsecurepassword"
-    assert user_1.is_staff == False
-    assert user_1.is_active == True
+    assert not user_1.is_staff
+    assert user_1.is_active
 
 
 @pytest.mark.django_db

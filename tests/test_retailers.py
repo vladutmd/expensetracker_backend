@@ -12,14 +12,14 @@ def test_retailer_1():
     retailer_1 = Retailer.objects.get(pk=1)
     user_1 = User.objects.get(pk=1)
     assert retailer_1.name == "AmazIn"
-    assert retailer_1.online == True
+    assert retailer_1.online
     assert retailer_1.user == user_1
 
 
 @pytest.mark.django_db
 def test_random_retailer_factory(retailer_factory):
     retailer = retailer_factory()
-    assert retailer.online == True
+    assert retailer.online
     assert "AmazI" in retailer.name
     assert retailer.name[-1].isdigit()
     assert "@" in retailer.user.email
@@ -31,7 +31,7 @@ def test_offline_retailer_factory(retailer_factory):
     assert "AmazI" in retailer.name
     assert retailer.name[-1].isdigit()
     assert "@" in retailer.user.email
-    assert retailer.online == False
+    assert not retailer.online
 
 
 @pytest.mark.django_db

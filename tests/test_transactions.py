@@ -23,7 +23,7 @@ def test_transaction_1():
     assert transaction_1.category == category_1
     assert transaction_1.date.isoformat() == "2021-04-20"
     assert transaction_1.transaction_type == "E"
-    assert transaction_1.recurring == False
+    assert not transaction_1.recurring
     assert transaction_1.user == user_1
 
 

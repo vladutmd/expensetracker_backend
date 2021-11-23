@@ -15,8 +15,7 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     username = factory.Sequence(lambda n: f"user_{n}")
     email = factory.Faker("email")
-    password = factory.PostGenerationMethodCall(
-        "set_password", f"{email}_password")
+    password = factory.PostGenerationMethodCall("set_password", f"{email}_password")
     is_active = True
     is_staff = False
 
@@ -25,7 +24,8 @@ class UserFactory(factory.django.DjangoModelFactory):
         if not create:
             return
         EmailAddress.objects.create(
-            email=obj.email, verified=True, primary=True, user=obj)
+            email=obj.email, verified=True, primary=True, user=obj
+        )
 
 
 class RetailerFactory(factory.django.DjangoModelFactory):
