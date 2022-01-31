@@ -1,11 +1,11 @@
 import pytest
+from allauth.account.models import EmailAddress
 from django.contrib.auth import get_user_model
 from djmoney.money import Money
-from expenses.models import Category, Retailer, Transaction
 from pytest_factoryboy import register
 from rest_framework.test import APIClient, APIRequestFactory
-from allauth.account.models import EmailAddress
 
+from expenses.models import Category, Retailer, Transaction
 from tests.factories import (
     CategoryFactory,
     RetailerFactory,

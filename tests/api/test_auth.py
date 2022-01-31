@@ -1,8 +1,9 @@
 from typing import Dict
+
 import pytest
-from django.urls import reverse
-from django.core import mail
 from django.contrib.auth import get_user_model
+from django.core import mail
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.response import Response
 

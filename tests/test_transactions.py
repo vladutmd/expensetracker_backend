@@ -3,8 +3,9 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db.utils import DataError
 from djmoney.money import Money
-from expenses.models import Category, Retailer, Transaction
 from moneyed.classes import CurrencyDoesNotExist
+
+from expenses.models import Category, Retailer, Transaction
 
 User = get_user_model()
 

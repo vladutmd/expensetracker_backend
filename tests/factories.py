@@ -1,10 +1,11 @@
 from datetime import date
 
 import factory
+from allauth.account.models import EmailAddress
 from django.contrib.auth import get_user_model
 from djmoney.money import Money
+
 from expenses.models import Category, Retailer, Transaction
-from allauth.account.models import EmailAddress
 
 User = get_user_model()
 
