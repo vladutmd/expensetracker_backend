@@ -60,7 +60,7 @@ def test_get_categories_with_token_actual_categories(
 @pytest.mark.django_db
 def test_post_category_without_authentication(api_client):
     list_category_url: str = reverse("view_and_create_categories")
-    data = {"name": "Groceries", "product_type": "P"}
+    data = {"name": "Groceries", "product_type": "P", "slug": "groceries"}
     list_response: Response = api_client.post(
         list_category_url, data=data, format="json"
     )
@@ -74,10 +74,36 @@ def test_post_category_with_authentication(api_client, user_factory):
     api_client.force_authenticate(user=user)
     list_category_url: str = reverse("view_and_create_categories")
 
-    data = {"name": "Groceries", "product_type": "P"}
+    data = {"name": "Groceries", "product_type": "P", "slug": "groceries"}
     list_response: Response = api_client.post(
         list_category_url, data=data, format="json"
     )
     final_count: int = Category.objects.all().count()
     assert list_response.status_code == status.HTTP_201_CREATED
     assert final_count == initial_count + 1
+
+
+@pytest.mark.django_db
+def test_post_category_twice(api_client, user_factory):
+    initial_count: int = Category.objects.all().count()
+    user = user_factory()
+    api_client.force_authenticate(user=user)
+    list_category_url: str = reverse("view_and_create_categories")
+
+    data = {"name": "Entertainment", "product_type": "E", "slug": "entertainment"}
+    list_response: Response = api_client.post(
+        list_category_url, data=data, format="json"
+    )
+    final_count: int = Category.objects.all().count()
+    assert list_response.status_code == status.HTTP_201_CREATED
+    assert final_count == initial_count + 1
+
+    # now let's try post it again
+    second_list_response: Response = api_client.post(
+        list_category_url, data=data, format="json"
+    )
+    assert second_list_response.status_code == status.HTTP_400_BAD_REQUEST
+    json_response: dict[str, list[str]] = second_list_response.json()
+    assert "The fields name, product_type, user, slug must make a unique set." in json_response["non_field_errors"]
+    # let's also assert that the count hasn't changed
+    assert Category.objects.count() == final_count

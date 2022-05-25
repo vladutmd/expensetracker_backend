@@ -35,6 +35,7 @@ class RetailerFactory(factory.django.DjangoModelFactory):
 
     user = factory.SubFactory(UserFactory)
     name = factory.Sequence(lambda n: f"AmazI{n}")
+    slug = factory.Sequence(lambda n: f"retailer-slug-{n}")
     online = True
 
 
@@ -44,6 +45,7 @@ class CategoryFactory(factory.django.DjangoModelFactory):
 
     user = factory.SubFactory(UserFactory)
     name = factory.Sequence(lambda n: f"Category_{n}")
+    slug = factory.Sequence(lambda n: f"category-slug-{n}")
     product_type = "P"
 
 

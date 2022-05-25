@@ -1,7 +1,7 @@
-import pytest
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.db.utils import DataError
+from django.db.utils import DataError, IntegrityError
+import pytest
 
 from expenses.models import Retailer
 
@@ -54,3 +54,13 @@ def test_online_invalid_bool(retailer_factory):
     with pytest.raises(ValidationError) as exception_info:
         retailer_factory(online="Falsish")
     assert exception_info.type == ValidationError
+
+
+@pytest.mark.django_db
+def test_cannot_create_two_retailers_with_same_slug_one_user(retailer_factory, user_factory):
+    user = user_factory()
+    _ = retailer_factory(slug="hi-there", user=user)
+    with pytest.raises(IntegrityError) as exception_info:
+        retailer_factory(slug="hi-there", user=user)
+    assert exception_info.type == IntegrityError
+
