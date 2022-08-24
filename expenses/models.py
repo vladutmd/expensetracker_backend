@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models.constraints import UniqueConstraint
 from djmoney.models.fields import MoneyField
 
 
@@ -15,8 +14,12 @@ class Retailer(models.Model):
         verbose_name = "retailer"
         verbose_name_plural = "retailers"
         constraints = [
-            models.UniqueConstraint(fields=["name", "user"], name="retailer_unique_name_per_user"),
-            models.UniqueConstraint(fields=["slug", "user"], name="retailer_unique_slug_per_user"),
+            models.UniqueConstraint(
+                fields=["name", "user"], name="retailer_unique_name_per_user"
+            ),
+            models.UniqueConstraint(
+                fields=["slug", "user"], name="retailer_unique_slug_per_user"
+            ),
         ]
 
     def __str__(self):
@@ -37,8 +40,12 @@ class Category(models.Model):
         verbose_name = "category"
         verbose_name_plural = "categories"
         constraints = [
-            models.UniqueConstraint(fields=["name", "user"], name="category_unique_name_per_user"),
-            models.UniqueConstraint(fields=["slug", "user"], name="category_unique_slug_per_user"),
+            models.UniqueConstraint(
+                fields=["name", "user"], name="category_unique_name_per_user"
+            ),
+            models.UniqueConstraint(
+                fields=["slug", "user"], name="category_unique_slug_per_user"
+            ),
         ]
 
     def __str__(self):

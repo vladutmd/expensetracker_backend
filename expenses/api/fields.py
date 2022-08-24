@@ -4,8 +4,8 @@ from rest_framework import serializers
 
 logger = logging.getLogger(__name__)
 
-class UserSpecificSlugRelatedField(serializers.SlugRelatedField):
 
+class UserSpecificSlugRelatedField(serializers.SlugRelatedField):
     def get_queryset(self):
         request = self.context.get("request")
         queryset = super(UserSpecificSlugRelatedField, self).get_queryset()
@@ -15,5 +15,5 @@ class UserSpecificSlugRelatedField(serializers.SlugRelatedField):
 
         if request and not request.user.is_superuser:
             queryset = queryset.filter(user=request.user)
-        
+
         return queryset

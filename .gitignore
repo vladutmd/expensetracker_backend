@@ -140,3 +140,6 @@ cython_debug/
 
 # Docker stuff
 .devcontainer/
+
+# pycharm stuff
+.idea/

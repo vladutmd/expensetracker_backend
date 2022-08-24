@@ -16,3 +16,6 @@ urlpatterns = [
         name="account_email_verification_sent",
     ),
 ]
+
+# TODO: add refresh token URLs
+# https://stackoverflow.com/questions/62599899/how-to-use-drf-jwt-resfresh
