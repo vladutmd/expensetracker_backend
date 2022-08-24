@@ -2,7 +2,11 @@ from dj_rest_auth.jwt_auth import JWTCookieAuthentication
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
-from expenses.api.serializers import CategorySerializer, RetailerSerializer, TransactionSerializer
+from expenses.api.serializers import (
+    CategorySerializer,
+    RetailerSerializer,
+    TransactionSerializer,
+)
 from expenses.models import Category, Retailer, Transaction
 
 
@@ -31,7 +35,6 @@ class CategoryRUD(generics.RetrieveUpdateDestroyAPIView):
         # this ensures that only a category created by the user can be accessed
         user = self.request.user
         return Category.objects.filter(user=user)
-
 
 
 class RetailerList(generics.ListCreateAPIView):
@@ -68,7 +71,7 @@ class TransactionList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         """
-        This ensures only the retailers created by the user are returned.
+        This ensures only the transactions created by the user are returned.
         """
         user = self.request.user
         return Transaction.objects.filter(user=user)
@@ -84,7 +87,7 @@ class TransactionRUD(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         """
-        This ensures only the retailers created by the user are returned.
+        this ensures that only a transaction created by the user can be accessed
         """
         user = self.request.user
         return Transaction.objects.filter(user=user)

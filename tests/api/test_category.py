@@ -12,7 +12,9 @@ def test_authentication_required(api_client: APIClient, category_factory):
     # let's create a category
     category: Category = category_factory()
     category_id: int = category.id
-    get_category_url: str = reverse("retrieve_update_delete_category", args=[category_id])
+    get_category_url: str = reverse(
+        "retrieve_update_delete_category", args=[category_id]
+    )
     get_response: Response = api_client.get(
         get_category_url,
     )
@@ -20,17 +22,22 @@ def test_authentication_required(api_client: APIClient, category_factory):
 
 
 @pytest.mark.django_db
-def test_get_own_category_with_token(api_client: APIClient, user_factory, category_factory):
+def test_get_own_category_with_token(
+    api_client: APIClient, user_factory, category_factory
+):
     user = user_factory()
     category: Category = category_factory(user=user)
     category_id: int = category.id
-    get_category_url: str = reverse("retrieve_update_delete_category", args=[category_id])
+    get_category_url: str = reverse(
+        "retrieve_update_delete_category", args=[category_id]
+    )
     api_client.force_authenticate(user=user)
     get_response: Response = api_client.get(
         get_category_url,
     )
     assert get_response.status_code == status.HTTP_200_OK
     assert get_response.json() == {
+        "id": category_id,
         "name": category.name,
         "product_type": category.product_type,
         "user": user.id,
@@ -39,12 +46,16 @@ def test_get_own_category_with_token(api_client: APIClient, user_factory, catego
 
 
 @pytest.mark.django_db
-def test_get_someone_elses_category_with_token(api_client: APIClient, user_factory, category_factory):
+def test_get_someone_elses_category_with_token(
+    api_client: APIClient, user_factory, category_factory
+):
     user = user_factory()
     user_2 = user_factory()
     category: Category = category_factory(user=user_2)
     category_id: int = category.id
-    get_category_url: str = reverse("retrieve_update_delete_category", args=[category_id])
+    get_category_url: str = reverse(
+        "retrieve_update_delete_category", args=[category_id]
+    )
     api_client.force_authenticate(user=user)
     get_response: Response = api_client.get(
         get_category_url,
@@ -58,11 +69,13 @@ def test_get_someone_elses_category_with_token(api_client: APIClient, user_facto
     )
     assert get_response.status_code == status.HTTP_200_OK
     assert get_response.json() == {
+        "id": category_id,
         "name": category.name,
         "product_type": category.product_type,
         "user": user_2.id,
         "slug": category.slug,
     }
+
 
 @pytest.mark.django_db
 def test_update_category(api_client: APIClient, user_factory, category_factory):
@@ -76,8 +89,8 @@ def test_update_category(api_client: APIClient, user_factory, category_factory):
         data={
             "name": "new_name",
             "product_type": category.product_type,
-            "slug": category.slug
-        }
+            "slug": category.slug,
+        },
     )
     assert response.status_code == status.HTTP_200_OK
     category.refresh_from_db()
@@ -91,13 +104,13 @@ def test_update_category(api_client: APIClient, user_factory, category_factory):
             "name": category.name,
             "product_type": category.product_type,
             "user": user_2.id,
-            "slug": category.slug
-        }
+            "slug": category.slug,
+        },
     )
     category.refresh_from_db()
     assert response.status_code == status.HTTP_200_OK
     assert category.user == user
-    # good, it did not change 
+    # good, it did not change
 
 
 @pytest.mark.django_db

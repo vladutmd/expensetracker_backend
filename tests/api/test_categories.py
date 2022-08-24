@@ -104,6 +104,13 @@ def test_post_category_twice(api_client, user_factory):
     )
     assert second_list_response.status_code == status.HTTP_400_BAD_REQUEST
     json_response: dict[str, list[str]] = second_list_response.json()
-    assert "The fields name, product_type, user, slug must make a unique set." in json_response["non_field_errors"]
+    assert (
+        "There is already a Category with this name for the current user"
+        in json_response["non_field_errors"]
+    )
+    assert (
+        "There is already a Category with this slug for the current user"
+        in json_response["non_field_errors"]
+    )
     # let's also assert that the count hasn't changed
     assert Category.objects.count() == final_count

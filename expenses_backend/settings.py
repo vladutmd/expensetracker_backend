@@ -25,7 +25,7 @@ SECRET_KEY = "ts(8(^+5s656@ye78j&%_9c9tn9p6tm6+t^9vn@paosc%5l4(@"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["justatesting.page", "localhost:8000", "localhost"]
+ALLOWED_HOSTS = ["localhost:8000", "localhost"]
 
 
 # Application definition
@@ -154,7 +154,7 @@ SITE_ID = 1
 
 
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-LOGIN_URL = "https://justatesting.page/users/login"
+LOGIN_URL = "http://localhost:8000/users/login"
 
 
 # Django Money settings
