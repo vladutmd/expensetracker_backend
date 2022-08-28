@@ -12,9 +12,7 @@ def test_authentication_required(api_client: APIClient, retailer_factory):
     # let's create a retailer
     retailer: Retailer = retailer_factory()
     retailer_id: int = retailer.id
-    get_retailer_url: str = reverse(
-        "retrieve_update_delete_retailer", args=[retailer_id]
-    )
+    get_retailer_url: str = reverse("retrieve_update_delete_retailer", args=[retailer_id])
     get_response: Response = api_client.get(
         get_retailer_url,
     )
@@ -22,15 +20,11 @@ def test_authentication_required(api_client: APIClient, retailer_factory):
 
 
 @pytest.mark.django_db
-def test_get_own_retailer_with_token(
-    api_client: APIClient, user_factory, retailer_factory
-):
+def test_get_own_retailer_with_token(api_client: APIClient, user_factory, retailer_factory):
     user = user_factory()
     retailer: retailer = retailer_factory(user=user)
     retailer_id: int = retailer.id
-    get_retailer_url: str = reverse(
-        "retrieve_update_delete_retailer", args=[retailer_id]
-    )
+    get_retailer_url: str = reverse("retrieve_update_delete_retailer", args=[retailer_id])
     api_client.force_authenticate(user=user)
     get_response: Response = api_client.get(
         get_retailer_url,
@@ -46,16 +40,12 @@ def test_get_own_retailer_with_token(
 
 
 @pytest.mark.django_db
-def test_get_someone_elses_retailer_with_token(
-    api_client: APIClient, user_factory, retailer_factory
-):
+def test_get_someone_elses_retailer_with_token(api_client: APIClient, user_factory, retailer_factory):
     user = user_factory()
     user_2 = user_factory()
     retailer: retailer = retailer_factory(user=user_2)
     retailer_id: int = retailer.id
-    get_retailer_url: str = reverse(
-        "retrieve_update_delete_retailer", args=[retailer_id]
-    )
+    get_retailer_url: str = reverse("retrieve_update_delete_retailer", args=[retailer_id])
     api_client.force_authenticate(user=user)
     get_response: Response = api_client.get(
         get_retailer_url,

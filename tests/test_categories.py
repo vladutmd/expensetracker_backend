@@ -49,9 +49,7 @@ def test_name_too_long(category_factory):
 
 
 @pytest.mark.django_db
-def test_cannot_create_two_categories_with_same_slug_one_user(
-    category_factory, user_factory
-):
+def test_cannot_create_two_categories_with_same_slug_one_user(category_factory, user_factory):
     user = user_factory()
     _ = category_factory(slug="hi-there", user=user)
     with pytest.raises(IntegrityError) as exception_info:

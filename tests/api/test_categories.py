@@ -30,9 +30,7 @@ def test_get_categories_with_token(api_client: APIClient, user_factory):
 
 
 @pytest.mark.django_db
-def test_get_categories_with_token_actual_categories(
-    api_client: APIClient, user_factory, category_factory
-):
+def test_get_categories_with_token_actual_categories(api_client: APIClient, user_factory, category_factory):
     email = "bobby@email.com"
     password = "smith"
     user = user_factory(email=email, password=password)
@@ -61,9 +59,7 @@ def test_get_categories_with_token_actual_categories(
 def test_post_category_without_authentication(api_client):
     list_category_url: str = reverse("view_and_create_categories")
     data = {"name": "Groceries", "product_type": "P", "slug": "groceries"}
-    list_response: Response = api_client.post(
-        list_category_url, data=data, format="json"
-    )
+    list_response: Response = api_client.post(list_category_url, data=data, format="json")
     assert list_response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
@@ -75,9 +71,7 @@ def test_post_category_with_authentication(api_client, user_factory):
     list_category_url: str = reverse("view_and_create_categories")
 
     data = {"name": "Groceries", "product_type": "P", "slug": "groceries"}
-    list_response: Response = api_client.post(
-        list_category_url, data=data, format="json"
-    )
+    list_response: Response = api_client.post(list_category_url, data=data, format="json")
     final_count: int = Category.objects.all().count()
     assert list_response.status_code == status.HTTP_201_CREATED
     assert final_count == initial_count + 1
@@ -91,26 +85,16 @@ def test_post_category_twice(api_client, user_factory):
     list_category_url: str = reverse("view_and_create_categories")
 
     data = {"name": "Entertainment", "product_type": "E", "slug": "entertainment"}
-    list_response: Response = api_client.post(
-        list_category_url, data=data, format="json"
-    )
+    list_response: Response = api_client.post(list_category_url, data=data, format="json")
     final_count: int = Category.objects.all().count()
     assert list_response.status_code == status.HTTP_201_CREATED
     assert final_count == initial_count + 1
 
     # now let's try post it again
-    second_list_response: Response = api_client.post(
-        list_category_url, data=data, format="json"
-    )
+    second_list_response: Response = api_client.post(list_category_url, data=data, format="json")
     assert second_list_response.status_code == status.HTTP_400_BAD_REQUEST
     json_response: dict[str, list[str]] = second_list_response.json()
-    assert (
-        "There is already a Category with this name for the current user"
-        in json_response["non_field_errors"]
-    )
-    assert (
-        "There is already a Category with this slug for the current user"
-        in json_response["non_field_errors"]
-    )
+    assert "There is already a Category with this name for the current user" in json_response["non_field_errors"]
+    assert "There is already a Category with this slug for the current user" in json_response["non_field_errors"]
     # let's also assert that the count hasn't changed
     assert Category.objects.count() == final_count

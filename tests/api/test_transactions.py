@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.test import APIClient
 
-from expenses.models import Category, Retailer, Transaction
+from expenses.models import Transaction
 
 
 @pytest.mark.django_db
@@ -30,9 +30,7 @@ def test_get_transactions_with_token(api_client: APIClient, user_factory):
 
 
 @pytest.mark.django_db
-def test_get_transactions_with_token_actual_transactions(
-    api_client: APIClient, user_factory, transaction_factory
-):
+def test_get_transactions_with_token_actual_transactions(api_client: APIClient, user_factory, transaction_factory):
     email = "bobby@email.com"
     password = "smith"
     user = user_factory(email=email, password=password)
@@ -71,21 +69,17 @@ def test_post_transaction_without_authentication(api_client):
         "recurring": "false",
         "user": 1,
     }
-    list_response: Response = api_client.post(
-        list_transaction_url, data=data, format="json"
-    )
+    list_response: Response = api_client.post(list_transaction_url, data=data, format="json")
     assert list_response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 @pytest.mark.django_db
-def test_post_transaction_with_authentication(
-    api_client, user_factory, category_factory, retailer_factory
-):
+def test_post_transaction_with_authentication(api_client, user_factory, category_factory, retailer_factory):
     initial_count: int = Transaction.objects.count()
     # let's create a category and a retailer
     user = user_factory()
-    category: Category = category_factory(slug="unique_category", user=user)
-    retailer: Retailer = retailer_factory(slug="unique_retailer", user=user)
+    category_factory(slug="unique_category", user=user)
+    retailer_factory(slug="unique_retailer", user=user)
 
     api_client.force_authenticate(user=user)
     list_transaction_url: str = reverse("view_and_create_transactions")
@@ -101,9 +95,7 @@ def test_post_transaction_with_authentication(
         "recurring": "false",
         "user": 1,
     }
-    list_response: Response = api_client.post(
-        list_transaction_url, data=data, format="json"
-    )
+    list_response: Response = api_client.post(list_transaction_url, data=data, format="json")
     print(list_response.json())
     final_count: int = Transaction.objects.count()
     assert list_response.status_code == status.HTTP_201_CREATED
@@ -111,14 +103,11 @@ def test_post_transaction_with_authentication(
 
 
 @pytest.mark.django_db
-def test_post_transaction_twice(
-    api_client, user_factory, category_factory, retailer_factory
-):
-    initial_count: int = Transaction.objects.count()
+def test_post_transaction_twice(api_client, user_factory, category_factory, retailer_factory):
     # let's create a category and a retailer
     user = user_factory()
-    category: Category = category_factory(slug="unique_category", user=user)
-    retailer: Retailer = retailer_factory(slug="unique_retailer", user=user)
+    category_factory(slug="unique_category", user=user)
+    retailer_factory(slug="unique_retailer", user=user)
 
     api_client.force_authenticate(user=user)
     list_transaction_url: str = reverse("view_and_create_transactions")
@@ -134,13 +123,9 @@ def test_post_transaction_twice(
         "recurring": "false",
         "user": 1,
     }
-    list_response: Response = api_client.post(
-        list_transaction_url, data=data, format="json"
-    )
+    api_client.post(list_transaction_url, data=data, format="json")
     # now let's post it again
-    second_list_response: Response = api_client.post(
-        list_transaction_url, data=data, format="json"
-    )
+    second_list_response: Response = api_client.post(list_transaction_url, data=data, format="json")
     json_response: dict[str, list[str]] = second_list_response.json()
     assert "The transaction is a duplicate" in json_response["non_field_errors"]
     final_count: int = Transaction.objects.count()

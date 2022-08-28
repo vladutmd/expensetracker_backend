@@ -2,10 +2,10 @@ from django.urls import path
 
 from expenses.api.views import (
     CategoryList,
-    RetailerList,
-    TransactionList,
     CategoryRUD,
+    RetailerList,
     RetailerRUD,
+    TransactionList,
     TransactionRUD,
 )
 
@@ -26,9 +26,7 @@ urlpatterns = [
         RetailerRUD.as_view(),
         name="retrieve_update_delete_retailer",
     ),
-    path(
-        "transactions/", TransactionList.as_view(), name="view_and_create_transactions"
-    ),
+    path("transactions/", TransactionList.as_view(), name="view_and_create_transactions"),
     path(
         "transactions/<int:pk>/",
         TransactionRUD.as_view(),

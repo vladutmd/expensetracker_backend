@@ -25,13 +25,9 @@ def django_db_setup(django_db_setup, django_db_blocker):
             password="themostsecurepassword",
             is_active=True,
         )
-        EmailAddress.objects.create(
-            email=user_1.email, verified=True, primary=True, user=user_1
-        )
+        EmailAddress.objects.create(email=user_1.email, verified=True, primary=True, user=user_1)
         retailer_1 = Retailer.objects.create(name="AmazIn", online=True, user=user_1)
-        category_1 = Category.objects.create(
-            name="Groceries", product_type="P", user=user_1
-        )
+        category_1 = Category.objects.create(name="Groceries", product_type="P", user=user_1)
         _ = Transaction.objects.create(
             amount=Money(420.00, "GBP"),
             name="Yoga Mat for Meditation",

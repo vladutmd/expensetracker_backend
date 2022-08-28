@@ -24,9 +24,7 @@ class UserFactory(factory.django.DjangoModelFactory):
     def verify(obj, create, extracted, **kwargs):
         if not create:
             return
-        EmailAddress.objects.create(
-            email=obj.email, verified=True, primary=True, user=obj
-        )
+        EmailAddress.objects.create(email=obj.email, verified=True, primary=True, user=obj)
 
 
 class RetailerFactory(factory.django.DjangoModelFactory):

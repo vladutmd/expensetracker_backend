@@ -24,26 +24,18 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name="category",
-            constraint=models.UniqueConstraint(
-                fields=("name", "user"), name="category_unique_name_per_user"
-            ),
+            constraint=models.UniqueConstraint(fields=("name", "user"), name="category_unique_name_per_user"),
         ),
         migrations.AddConstraint(
             model_name="category",
-            constraint=models.UniqueConstraint(
-                fields=("slug", "user"), name="category_unique_slug_per_user"
-            ),
+            constraint=models.UniqueConstraint(fields=("slug", "user"), name="category_unique_slug_per_user"),
         ),
         migrations.AddConstraint(
             model_name="retailer",
-            constraint=models.UniqueConstraint(
-                fields=("name", "user"), name="retailer_unique_name_per_user"
-            ),
+            constraint=models.UniqueConstraint(fields=("name", "user"), name="retailer_unique_name_per_user"),
         ),
         migrations.AddConstraint(
             model_name="retailer",
-            constraint=models.UniqueConstraint(
-                fields=("slug", "user"), name="retailer_unique_slug_per_user"
-            ),
+            constraint=models.UniqueConstraint(fields=("slug", "user"), name="retailer_unique_slug_per_user"),
         ),
     ]

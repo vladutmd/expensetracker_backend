@@ -30,9 +30,7 @@ class Migration(migrations.Migration):
                 ("name", models.CharField(max_length=255)),
                 (
                     "product_type",
-                    models.CharField(
-                        choices=[("P", "Physical"), ("E", "Electronic")], max_length=1
-                    ),
+                    models.CharField(choices=[("P", "Physical"), ("E", "Electronic")], max_length=1),
                 ),
                 (
                     "user",
@@ -303,9 +301,7 @@ class Migration(migrations.Migration):
                 ("date", models.DateField()),
                 (
                     "transaction_type",
-                    models.CharField(
-                        choices=[("E", "Expense"), ("I", "Income")], max_length=1
-                    ),
+                    models.CharField(choices=[("E", "Expense"), ("I", "Income")], max_length=1),
                 ),
                 ("recurring", models.BooleanField()),
                 (

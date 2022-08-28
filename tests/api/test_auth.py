@@ -114,9 +114,7 @@ def test_registration_verification_and_authentication_with_get_endpoint(api_clie
     assert login_response.status_code == status.HTTP_400_BAD_REQUEST
 
     email_body: str = mail.outbox[-1].body
-    start_of_link: int = email_body.find(
-        "http"
-    )  # not adding more in case we want to later add https
+    start_of_link: int = email_body.find("http")  # not adding more in case we want to later add https
     link: str = email_body[start_of_link:].split("\n")[0]
     # now let's GET request that and we should have been redirected
     response: Response = api_client.get(link)

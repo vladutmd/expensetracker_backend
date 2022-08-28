@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.test import APIClient
 
-from expenses.models import Transaction, Category, Retailer
+from expenses.models import Category, Retailer, Transaction
 
 
 @pytest.mark.django_db
@@ -14,9 +14,7 @@ def test_authentication_required(api_client: APIClient, transaction_factory):
     # let's create a transaction
     transaction: Transaction = transaction_factory()
     transaction_id: int = transaction.id
-    get_transaction_url: str = reverse(
-        "retrieve_update_delete_transaction", args=[transaction_id]
-    )
+    get_transaction_url: str = reverse("retrieve_update_delete_transaction", args=[transaction_id])
     get_response: Response = api_client.get(
         get_transaction_url,
     )
@@ -24,15 +22,11 @@ def test_authentication_required(api_client: APIClient, transaction_factory):
 
 
 @pytest.mark.django_db
-def test_get_own_transaction_with_token(
-    api_client: APIClient, user_factory, transaction_factory
-):
+def test_get_own_transaction_with_token(api_client: APIClient, user_factory, transaction_factory):
     user = user_factory()
     transaction: Transaction = transaction_factory(user=user)
     transaction_id: int = transaction.id
-    get_transaction_url: str = reverse(
-        "retrieve_update_delete_transaction", args=[transaction_id]
-    )
+    get_transaction_url: str = reverse("retrieve_update_delete_transaction", args=[transaction_id])
     api_client.force_authenticate(user=user)
     get_response: Response = api_client.get(
         get_transaction_url,
@@ -53,16 +47,12 @@ def test_get_own_transaction_with_token(
 
 
 @pytest.mark.django_db
-def test_get_someone_elses_transaction_with_token(
-    api_client: APIClient, user_factory, transaction_factory
-):
+def test_get_someone_elses_transaction_with_token(api_client: APIClient, user_factory, transaction_factory):
     user = user_factory()
     user_2 = user_factory()
     transaction: transaction = transaction_factory(user=user_2)
     transaction_id: int = transaction.id
-    get_transaction_url: str = reverse(
-        "retrieve_update_delete_transaction", args=[transaction_id]
-    )
+    get_transaction_url: str = reverse("retrieve_update_delete_transaction", args=[transaction_id])
     api_client.force_authenticate(user=user)
     get_response: Response = api_client.get(
         get_transaction_url,
@@ -100,13 +90,9 @@ def test_update_transaction(
     user = user_factory()
     category: Category = category_factory(user=user)
     retailer: Retailer = retailer_factory(user=user)
-    transaction: Transaction = transaction_factory(
-        user=user, category=category, retailer=retailer, name="original_nme"
-    )
+    transaction: Transaction = transaction_factory(user=user, category=category, retailer=retailer, name="original_nme")
     transaction_id: int = transaction.id
-    transaction_url: str = reverse(
-        "retrieve_update_delete_transaction", args=[transaction_id]
-    )
+    transaction_url: str = reverse("retrieve_update_delete_transaction", args=[transaction_id])
     api_client.force_authenticate(user=user)
     print(transaction.category.__dict__)
     print(transaction.retailer.__dict__)
@@ -158,9 +144,7 @@ def test_delete_transaction(api_client: APIClient, user_factory, transaction_fac
     user = user_factory()
     transaction: Transaction = transaction_factory(user=user, name="gonna_have_to_go")
     transaction_id: int = transaction.id
-    transaction_url: str = reverse(
-        "retrieve_update_delete_transaction", args=[transaction_id]
-    )
+    transaction_url: str = reverse("retrieve_update_delete_transaction", args=[transaction_id])
     api_client.force_authenticate(user=user)
     response: Response = api_client.delete(transaction_url)
     assert response.status_code == status.HTTP_204_NO_CONTENT
